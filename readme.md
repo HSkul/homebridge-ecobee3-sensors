@@ -1,7 +1,7 @@
 
 # homebridge-ecobee3-sensors
 
-[![NPM version](https://badge.fury.io/js/homebridge-ecobee3-sensors.svg)](https://badge.fury.io/js/homebridge-ecobee3-sensors)
+[In development: adding support for exposing cooling and heating threshold temperatures]
 
 [Homebridge](https://github.com/nfarina/homebridge) plugin for exposing wireless temperature and occupancy sensors of your [Ecobee 3 Thermostat](https://www.ecobee.com/ecobee3/) as [HomeKit](https://www.apple.com/ios/home/) accesories. The thermostat itself is a HomeKit accessory, but the sensors are not visible in the [Home app](https://www.apple.com/ios/home/) out of the box. This plugin fixes this problem, so you can have home automation rules based on room occupancy.
 

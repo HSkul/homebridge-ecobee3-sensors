@@ -248,7 +248,8 @@ EcobeePlatform.prototype.update = function (callback) {
           'selectionType': 'registered',
           'selectionMatch': '',
           'includeSensors': true,
-          'includeEquipmentStatus': true
+          'includeEquipmentStatus': true,
+          'includeProgram': true
         }
       })
     }),

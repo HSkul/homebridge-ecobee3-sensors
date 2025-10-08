@@ -40,7 +40,7 @@ function EcobeeEquipment(log, config, platform, homebridgeAccessory) {
 
   var temperatureServiceCT = null, temperatureServiceHT = null;
 
-  temperatureService = this.homebridgeAccessory.getService(Service.TemperatureSensor);
+  temperatureServiceCT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
   if (!temperatureServiceCT) {
     temperatureServiceCT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
     temperatureServiceCT.displayName = "Cooling Threshold";

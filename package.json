@@ -12,10 +12,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/vojtamolda/homebridge-ecobee3-sensors.git"
+    "url": "git://github.com/HSkul/homebridge-ecobee3-sensors.git"
   },
   "bugs": {
-    "url": "http:://github.com/vojtamolda/homebridge-ecobee3-sensors/issues"
+    "url": "http:://github.com/HSkul/homebridge-ecobee3-sensors/issues"
   },
   "engines": {
     "node": ">=4.3.2",

@@ -69,21 +69,19 @@ EcobeeEquipment.prototype.update = function (status) {
     this.switchState.setValue(currentValue);
     this.log.info(this.prefix + " - " + status);
   }
-  if (status.hasOwnProperty("coolTemp")) {
-    const currentclimate = status.climates.find((climate) => climate.climateRef === status.currentClimateRef)
-    // Need to check here to make sure we got a value?
-    var temperatureThreshold;
-    if (this.coolingtemperatureCharacteristic) {
-      temperatureThreshold = f2c(currentclimate.coolTemp);
-      this.coolingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
-    }
-    
-    if (this.heatingtemperatureCharacteristic) {
-      temperatureThreshold = f2c(currentclimate.heatTemp);
-      this.heatingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
-    }
-  this.log.info(this.prefix + " - " + currentclimate);
+  const currentclimate = status.climates.find((climate) => climate.climateRef === status.currentClimateRef)
+  // Need to check here to make sure we got a value?
+  var temperatureThreshold;
+  if (this.coolingtemperatureCharacteristic) {
+    temperatureThreshold = f2c(currentclimate.coolTemp);
+    this.coolingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
   }
+    
+  if (this.heatingtemperatureCharacteristic) {
+    temperatureThreshold = f2c(currentclimate.heatTemp);
+    this.heatingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
+  }
+  this.log.info(this.prefix + " - " + currentclimate);
 };
 
 

@@ -273,6 +273,8 @@ EcobeePlatform.prototype.update = function (callback) {
           this.clean();
           setTimeout(this.update.bind(this), this.updateFrequency*1000);
           this.log.info("Wait | " + this.updateFrequency + " seconds");
+          this.log.info("data: " + data);
+          this.log.info("reply: " + reply);
           if (callback) callback();
           break;
         case 14:

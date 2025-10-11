@@ -69,6 +69,7 @@ EcobeeEquipment.prototype.update = function (status) {
     this.switchState.setValue(currentValue);
     this.log.info(this.prefix + " - " + status);
   }
+  /*
   const activeClimates = status.climates
   const currentclimate = activeClimates.find((climate) => climate.climateRef === status.currentClimateRef)
   // Need to check here to make sure we got a value?
@@ -82,7 +83,7 @@ EcobeeEquipment.prototype.update = function (status) {
     temperatureThreshold = f2c(currentclimate.heatTemp);
     this.heatingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
   }
-  this.log.info(this.prefix + " - " + currentclimate);
+  this.log.info(this.prefix + " - " + currentclimate); */
 };
 
 

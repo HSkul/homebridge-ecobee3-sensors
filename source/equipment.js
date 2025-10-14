@@ -37,23 +37,6 @@ function EcobeeEquipment(log, config, platform, homebridgeAccessory) {
     service.displayName = 'Equipment';
   }
   this.switchState = service.getCharacteristic(Characteristic.ContactSensorState);
-
-  var temperatureServiceCT = null, temperatureServiceHT = null;
-
-  temperatureServiceCT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
-  if (!temperatureServiceCT) {
-    temperatureServiceCT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
-    temperatureServiceCT.displayName = "Cooling Threshold";
-  }
-  this.coolingtemperatureCharacteristic = temperatureServiceCT.getCharacteristic(Characteristic.CurrentTemperature);
-  
-  temperatureServiceHT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
-  if (!temperatureServiceHT) {
-    temperatureServiceHT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
-    temperatureServiceHT.displayName = "Heating Threshold";
-  }
-  this.heatingtemperatureCharacteristic = temperatureServiceHT.getCharacteristic(Characteristic.CurrentTemperature);
-  
   this.log.info(this.prefix, "Initialized | " + config.name);
   this.update(true);
 }
@@ -69,21 +52,6 @@ EcobeeEquipment.prototype.update = function (status) {
     this.switchState.setValue(currentValue);
     this.log.info(this.prefix + " - " + status);
   }
-  /*
-  const activeClimates = status.climates
-  const currentclimate = activeClimates.find((climate) => climate.climateRef === status.currentClimateRef)
-  // Need to check here to make sure we got a value?
-  var temperatureThreshold;
-  if (this.coolingtemperatureCharacteristic) {
-    temperatureThreshold = f2c(currentclimate.coolTemp);
-    this.coolingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
-  }
-    
-  if (this.heatingtemperatureCharacteristic) {
-    temperatureThreshold = f2c(currentclimate.heatTemp);
-    this.heatingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
-  }
-  this.log.info(this.prefix + " - " + currentclimate); */
 };
 
 

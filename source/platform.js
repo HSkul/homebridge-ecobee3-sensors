@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 /* jshint sub: true */
 
-var UUIDGen, Accessory, EcobeeSensor, EcobeeEquipment;
+var UUIDGen, Accessory, EcobeeSensor, EcobeeEquipment, EcobeeExstras;
 var Querystring = require('querystring');
 var Https = require('https');
 
@@ -69,11 +69,12 @@ class EBLogger {
 }
 
 
-module.exports = function (uuidGen, accessory, ecobeeSensor, ecobeeEquipment) {
+module.exports = function (uuidGen, accessory, ecobeeSensor, ecobeeEquipment, ecobeeExtras) {
   UUIDGen = uuidGen
   Accessory = accessory;
   EcobeeSensor = ecobeeSensor;
   EcobeeEquipment = ecobeeEquipment;
+  EcobeeExtras = ecobeeExtras;
 
   return EcobeePlatform;
 };
@@ -95,6 +96,7 @@ function EcobeePlatform(log, config, homebridgeAPI) {
   this.excludeTemperatureSensors = this.config.exclude_temperature_sensors || false;
   this.excludeEquipmentSensors = this.config.exclude_equipment_sensors || false;
   this.excludeThermostat = this.config.ex || false;
+  this.excludeExtras = this.config.exclude_extras || false;
   this.updateFrequency = this.config.update_frequency || 30;
   this.logLevel = this.config.log_level || Verbosity.Info;
 
@@ -270,6 +272,8 @@ EcobeePlatform.prototype.update = function (callback) {
           this.sensors(reply);
           this.log.info("Update equipments");
           this.equipments(reply);
+          this.log.info("Update extras");
+          this.extras(reply);
           this.clean();
           setTimeout(this.update.bind(this), this.updateFrequency*1000);
           this.log.info("Wait | " + this.updateFrequency + " seconds");
@@ -390,6 +394,61 @@ EcobeePlatform.prototype.equipments = function (reply) {
       var equipment = this.ecobeeAccessories[equipmentName];
       if (equipment.isEquipment) {
         equipment.update(activeEquipments.includes(equipmentName));
+      }
+    }
+  }
+};
+
+EcobeePlatform.prototype.extras = function (reply) {
+  this.log.debug("Setting values of extras...");
+  if (!reply.thermostatList || reply.thermostatList.length === 0) {
+    this.log.error("No Ecobee thermostats found. Please, make soure your thermostat is registered.");
+    return;
+  }
+
+  for (var thermostatConfig of reply.thermostatList) {
+    if (supportedThermostats.indexOf(thermostatConfig.modelNumber) == -1) {
+      this.log.info("Not supported thermostat | " + thermostatConfig.name + " (" + thermostatConfig.modelNumber + ")");
+      continue
+    }
+
+    
+    // We need the program object for the threshold temperatures
+    if (thermostatConfig.program) {
+      
+      const activeClimates = thermostatConfig.program.climates;
+      const currentClimate = activeClimates.find((climate) => climate.climateRef === thermostatConfig.program.currentClimateRef);
+      const extraName = thermostatConfig.name+ " thresholdTemperature";      // This is the name of the accessory containing both threshold temperatures
+
+
+      // We need to make just one accessory that will have two temperature characteristics
+      // The update will then just take the current climate and update both characteristics
+      // This is the config to send to the constructor
+      const extraConfig = {
+        "name": extraName,
+        "code": extraName,
+        "climate": currentClimate
+      }
+
+      
+      var extra = this.ecobeeAccessories[extraName];
+      if (!extra) {
+        var homebridgeAccessory = this.homebridgeAccessories[extraName];
+        if (!homebridgeAccessory) {
+          this.log.info("Create | " + extraName);
+
+          homebridgeAccessory = new Accessory(extraName, UUIDGen.generate(`extra ${extraName}`));
+          homebridgeAccessory.context['code'] = extraName;
+          this.homebridgeAPI.registerPlatformAccessories("homebridge-ecobee3-sensors", "Ecobee 3 Sensors", [homebridgeAccessory]);
+        } else {
+          this.log.info("Cached | " + extraName);
+          delete this.homebridgeAccessories[extraName];
+        }
+        // Here we need to send the currentClimate to the constructor as well as the name 
+        extra = new EcobeeExtras(this.log, extraConfig, this, homebridgeAccessory);
+        this.ecobeeAccessories[extraName] = extra;
+      } else {
+      extra.update(currentClimate);       // update the accessory by sending currentClimate to the update function
       }
     }
   }

@@ -73,3 +73,8 @@ EcobeeExtras.prototype.identify = function (callback) {
   this.log.info(this.prefix, "Identify");
   if (callback) callback();
 };
+
+function f2c(fahrenheit10x) {
+  var celsius = (parseInt(fahrenheit10x, 10) - 320) * 5 / 90;
+  return celsius;
+};

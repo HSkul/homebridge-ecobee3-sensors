@@ -31,19 +31,24 @@ function EcobeeExtras(log, config, platform, homebridgeAccessory) {
   var temperatureServiceCT = null, temperatureServiceHT = null;
 
   temperatureServiceCT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
+  temperatureServiceHT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
   if (!temperatureServiceCT) {
     temperatureServiceCT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
     temperatureServiceCT.displayName = "Cooling Threshold";
+    temperatureServiceHT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
+    temperatureServiceHT.displayName = "Heating Threshold";
   }
   this.coolingtemperatureCharacteristic = temperatureServiceCT.getCharacteristic(Characteristic.CurrentTemperature);
-  
+  this.heatingtemperatureCharacteristic = temperatureServiceHT.getCharacteristic(Characteristic.CurrentTemperature);
+
+  /*
   temperatureServiceHT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
   if (!temperatureServiceHT) {
     temperatureServiceHT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
     temperatureServiceHT.displayName = "Heating Threshold";
   }
   this.heatingtemperatureCharacteristic = temperatureServiceHT.getCharacteristic(Characteristic.CurrentTemperature);
-  
+  */
   this.log.info(this.prefix, "Initialized | " + config.name);
 
   this.update(config.climate);  // Update services with the climate

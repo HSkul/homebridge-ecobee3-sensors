@@ -67,7 +67,7 @@ EcobeeExtras.prototype.update = function (status) {
   var temperatureCharacteristic;
   if (this.temperatureCharacteristic) {
     temperatureCharacteristic = f2c(status.temp);
-    this.coolingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
+    this.temperatureCharacteristic.updateValue(temperatureThreshold, null, this);
   }
     
   //if (this.heatingtemperatureCharacteristic) {

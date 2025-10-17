@@ -452,6 +452,7 @@ EcobeePlatform.prototype.extras = function (reply) {
           this.ecobeeAccessories[extraConfig.name] = extra;
         } else {
         extra.update(extraConfig);       // update the accessory by sending name, code and temp (F*10) to the update function
+        }
       }
     }
   }

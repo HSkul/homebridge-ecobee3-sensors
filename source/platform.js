@@ -440,7 +440,7 @@ EcobeePlatform.prototype.extras = function (reply) {
           if (!homebridgeAccessory) {
             this.log.info("Create | " + extraConfig.name);
 
-            homebridgeAccessory = new Accessory(extraConfig.name, UUIDGen.generate(extraConfig.name}));
+            homebridgeAccessory = new Accessory(extraConfig.name, UUIDGen.generate(extraConfig.name));
             homebridgeAccessory.context['code'] = extraConfig.name;
             this.homebridgeAPI.registerPlatformAccessories("homebridge-ecobee3-sensors", "Ecobee 3 Sensors", [homebridgeAccessory]);
           } else {

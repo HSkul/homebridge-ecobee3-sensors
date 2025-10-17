@@ -425,8 +425,8 @@ EcobeePlatform.prototype.extras = function (reply) {
       
       for (var thresholdName of thresholdNames) {
         const extraConfig = {
-          "name": thermostatConfig.Name+" "+thresholdName,
-          "code": thermostatConfig.Name+" "+thresholdName,
+          "name": thermostatConfig.name+" "+thresholdName,
+          "code": thermostatConfig.name+" "+thresholdName,
           "temp": thresholdTemps[thresholdName]
         }
 

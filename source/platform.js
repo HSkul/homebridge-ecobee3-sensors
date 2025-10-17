@@ -367,7 +367,8 @@ EcobeePlatform.prototype.equipments = function (reply) {
     if (thermostatConfig.equipmentStatus) {
       for (var equipmentName of thermostatConfig.equipmentStatus.split(',')) {
         if (equipmentName === '') continue;
-        equipmentName = "Ecobee " + equipmentName.trim();
+        // equipmentName = "Ecobee " + equipmentName.trim();  
+        equipmentName = thermostatConfig.name + " " + equipmentName.trim();
         var equipment = this.ecobeeAccessories[equipmentName];
       
         if (!equipment) {

@@ -418,8 +418,10 @@ EcobeePlatform.prototype.extras = function (reply) {
       const thresholdNames = ["coolTemp","heatTemp"];
       const activeClimates = thermostatConfig.program.climates;
       const currentClimate = activeClimates.find((climate) => climate.climateRef === thermostatConfig.program.currentClimateRef);
-      const thresholdTemps["coolTemp"] = currentClimate.coolTemp;
-      const thresholdTemps["heatTemp"] = currentClimate.heatTemp;
+      var thresholdTemps = [];
+      
+      thresholdTemps["coolTemp"] = currentClimate.coolTemp;
+      thresholdTemps["heatTemp"] = currentClimate.heatTemp;
       
       for (var thresholdName of thresholdNames) {
         const extraConfig = {

@@ -415,40 +415,41 @@ EcobeePlatform.prototype.extras = function (reply) {
     
     // We need the program object for the threshold temperatures
     if (thermostatConfig.program) {
-      
+      const thresholdNames = ["coolTemp","heatTemp"];
       const activeClimates = thermostatConfig.program.climates;
       const currentClimate = activeClimates.find((climate) => climate.climateRef === thermostatConfig.program.currentClimateRef);
-      const extraName = thermostatConfig.name+ " thresholdTemperature";      // This is the name of the accessory containing both threshold temperatures
-
-
-      // We need to make just one accessory that will have two temperature characteristics
-      // The update will then just take the current climate and update both characteristics
-      // This is the config to send to the constructor
-      const extraConfig = {
-        "name": extraName,
-        "code": extraName,
-        "climate": currentClimate
-      }
-
+      const thresholdTemps["coolTemp"] = currentClimate.coolTemp;
+      const thresholdTemps["heatTemp"] = currentClimate.heatTemp;
       
-      var extra = this.ecobeeAccessories[extraName];
-      if (!extra) {
-        var homebridgeAccessory = this.homebridgeAccessories[extraName];
-        if (!homebridgeAccessory) {
-          this.log.info("Create | " + extraName);
-
-          homebridgeAccessory = new Accessory(extraName, UUIDGen.generate(`extra ${extraName}`));
-          homebridgeAccessory.context['code'] = extraName;
-          this.homebridgeAPI.registerPlatformAccessories("homebridge-ecobee3-sensors", "Ecobee 3 Sensors", [homebridgeAccessory]);
-        } else {
-          this.log.info("Cached | " + extraName);
-          delete this.homebridgeAccessories[extraName];
+      for (var thresholdName of thresholdNames) {
+        const extraConfig = {
+          "name": thermostatConfig.Name+" "+thresholdName,
+          "code": thermostatConfig.Name+" "+thresholdName,
+          "temp": thresholdTemps[thresdholdName]
         }
+
+      // Need to loop through the two threshold, need to have arrays for it:
+      // thresholdName = ["coolTemp","heatTemp"]
+      //const extraName = thermostatConfig.name+ " thresholdTemperature";      // This is the name of the accessory containing both threshold temperatures
+      
+        var extra = this.ecobeeAccessories[extraConfig.name];
+        if (!extra) {
+          var homebridgeAccessory = this.homebridgeAccessories[extraConfig.name];
+          if (!homebridgeAccessory) {
+            this.log.info("Create | " + extraConfig.name);
+
+            homebridgeAccessory = new Accessory(extraConfig.name, UUIDGen.generate(extraConfig.name}));
+            homebridgeAccessory.context['code'] = extraConfig.name;
+            this.homebridgeAPI.registerPlatformAccessories("homebridge-ecobee3-sensors", "Ecobee 3 Sensors", [homebridgeAccessory]);
+          } else {
+            this.log.info("Cached | " + extraConfig.name);
+            delete this.homebridgeAccessories[extraConfig.name];
+          }
         // Here we need to send the currentClimate to the constructor as well as the name 
-        extra = new EcobeeExtras(this.log, extraConfig, this, homebridgeAccessory);
-        this.ecobeeAccessories[extraName] = extra;
-      } else {
-      extra.update(currentClimate);       // update the accessory by sending currentClimate to the update function
+          extra = new EcobeeExtras(this.log, extraConfig, this, homebridgeAccessory);
+          this.ecobeeAccessories[extraConfig.name] = extra;
+        } else {
+        extra.update(extraConfig);       // update the accessory by sending name, code and temp (F*10) to the update function
       }
     }
   }

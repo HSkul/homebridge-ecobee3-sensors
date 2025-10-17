@@ -427,7 +427,7 @@ EcobeePlatform.prototype.extras = function (reply) {
         const extraConfig = {
           "name": thermostatConfig.Name+" "+thresholdName,
           "code": thermostatConfig.Name+" "+thresholdName,
-          "temp": thresholdTemps[thresdholdName]
+          "temp": thresholdTemps[thresholdName]
         }
 
       // Need to loop through the two threshold, need to have arrays for it:

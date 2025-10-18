@@ -10,6 +10,8 @@ Install in the Homebridge user interface shell using the following command:
 
 npm install https://github.com/HSkul/homebridge-ecobee3-sensors.git
 
+<img src="images/Screenshot.png">
+
 [Homebridge](https://github.com/nfarina/homebridge) plugin for exposing wireless temperature and occupancy sensors of your [Ecobee 3 Thermostat](https://www.ecobee.com/ecobee3/) as [HomeKit](https://www.apple.com/ios/home/) accesories. The thermostat itself is a HomeKit accessory, but the sensors are not visible in the [Home app](https://www.apple.com/ios/home/) out of the box. This plugin fixes this problem, so you can have home automation rules based on room occupancy.
 
 <img src="images/overview.png">

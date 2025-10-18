@@ -412,29 +412,23 @@ EcobeePlatform.prototype.extras = function (reply) {
       this.log.info("Not supported thermostat | " + thermostatConfig.name + " (" + thermostatConfig.modelNumber + ")");
       continue
     }
-
-    
     // We need the program object for the threshold temperatures
     if (thermostatConfig.program) {
-      const thresholdNames = ["coolTemp","heatTemp"];
+      const thresholdNames = ["coolTemp","heatTemp"];  // The variable names current climate
       const activeClimates = thermostatConfig.program.climates;
       const currentClimate = activeClimates.find((climate) => climate.climateRef === thermostatConfig.program.currentClimateRef);
       var thresholdTemps = [];
-      
+      // There is a better way to do this, but it works
       thresholdTemps["coolTemp"] = currentClimate.coolTemp;
       thresholdTemps["heatTemp"] = currentClimate.heatTemp;
-      
+      // extraConfig is sent to the functions, don't really need code, here for completeness
       for (var thresholdName of thresholdNames) {
         const extraConfig = {
           "name": thermostatConfig.name+" "+thresholdName,
           "code": thermostatConfig.name+" "+thresholdName,
           "temp": thresholdTemps[thresholdName]
         }
-
-      // Need to loop through the two threshold, need to have arrays for it:
-      // thresholdName = ["coolTemp","heatTemp"]
-      //const extraName = thermostatConfig.name+ " thresholdTemperature";      // This is the name of the accessory containing both threshold temperatures
-      
+ 
         var extra = this.ecobeeAccessories[extraConfig.name];
         if (!extra) {
           var homebridgeAccessory = this.homebridgeAccessories[extraConfig.name];
@@ -448,7 +442,7 @@ EcobeePlatform.prototype.extras = function (reply) {
             this.log.info("Cached | " + extraConfig.name);
             delete this.homebridgeAccessories[extraConfig.name];
           }
-        // Here we need to send the currentClimate to the constructor as well as the name 
+        // Here we need to send the name and temperature value (f*10) to the constructor 
           extra = new EcobeeExtras(this.log, extraConfig, this, homebridgeAccessory);
           this.ecobeeAccessories[extraConfig.name] = extra;
         } else {

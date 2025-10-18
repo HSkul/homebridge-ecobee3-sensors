@@ -1,7 +1,14 @@
 
 # homebridge-ecobee3-sensors
 
-[In development: adding support for exposing cooling and heating threshold temperatures]
+Forked from [vojtamolda/homebridge-ecobee3-sensors](https://github.com/vojtamolda/homebridge-ecobee3-sensors) and the following changes made:
+- added cooling and heating threshold temperatures (for each thermostat) as temperature sensors
+- added exclude_extras in the config file to enable not showing the threshold temperatures
+- changed the name of the equipment contact sensors to "name of thermostat " + "name of equipment" so it works better with multiple Ecobee thermostats
+
+Install in the Homebridge user interface shell using the following command:
+
+npm install https://github.com/HSkul/homebridge-ecobee3-sensors.git
 
 [Homebridge](https://github.com/nfarina/homebridge) plugin for exposing wireless temperature and occupancy sensors of your [Ecobee 3 Thermostat](https://www.ecobee.com/ecobee3/) as [HomeKit](https://www.apple.com/ios/home/) accesories. The thermostat itself is a HomeKit accessory, but the sensors are not visible in the [Home app](https://www.apple.com/ios/home/) out of the box. This plugin fixes this problem, so you can have home automation rules based on room occupancy.
 
@@ -39,6 +46,8 @@ Homebridge is setup via `config.json` file sitting in the `~/.homebridge/` direc
     "exclude_temperature_sensors": false,
     "exclude_thermostat": false,
     "exclude_equipment_sensors": false,
+    "exclude_extras": false,
+    "update_frequency": 600,
     "log_level": 3
   }
 ]

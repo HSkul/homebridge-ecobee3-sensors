@@ -30,26 +30,15 @@ function EcobeeExtras(log, config, platform, homebridgeAccessory) {
   informationService.getCharacteristic(Characteristic.Model).setValue("ecobee3 extras");
   informationService.getCharacteristic(Characteristic.SerialNumber).setValue('ecobee3-extras-' + config.name);
 
-
-  // One temperature sensor per accessory, the config now contains name, code and climate
   if (platform.excludeExtras) return;
 
-  var temperatureService = null; //, temperatureServiceHT = null;
-
+  var temperatureService = null;
   temperatureService = this.homebridgeAccessory.getService(Service.TemperatureSensor);
   if (!temperatureService) {
     temperatureService = this.homebridgeAccessory.addService(Service.TemperatureSensor);
     temperatureService.displayName = config.name;
   }
-  this.temperatureCharacteristic = temperatureService.getCharacteristic(Characteristic.CurrentTemperature);
-  
-  //temperatureServiceHT = this.homebridgeAccessory.getService(Service.TemperatureSensor);
-  //if (!temperatureServiceHT) {
-  //  temperatureServiceHT = this.homebridgeAccessory.addService(Service.TemperatureSensor);
-  //  temperatureServiceHT.displayName = "Heating Threshold";
-  //}
-  //this.heatingtemperatureCharacteristic = temperatureServiceHT.getCharacteristic(Characteristic.CurrentTemperature);
-  
+  this.temperatureCharacteristic = temperatureService.getCharacteristic(Characteristic.CurrentTemperature);  
   this.log.info(this.prefix, "Initialized | " + config.name);
 
   this.update(config);  // Update services with the config with name, code and temp
@@ -58,22 +47,11 @@ function EcobeeExtras(log, config, platform, homebridgeAccessory) {
 EcobeeExtras.prototype.update = function (status) {
   this.log.debug(this.prefix, "Updating extras measurement " + this.name);
   // status is actually the name, code and current temp (F*10)
-  
-  
-
-  //const activeClimates = status.climates
-  //const currentclimate = activeClimates.find((climate) => climate.climateRef === status.currentClimateRef)
-  // Need to check here to make sure we got a value?
   var temperatureCharacteristic;
   if (this.temperatureCharacteristic) {
     temperatureCharacteristic = f2c(status.temp);
     this.temperatureCharacteristic.updateValue(temperatureCharacteristic, null, this);
   }
-    
-  //if (this.heatingtemperatureCharacteristic) {
-  //  temperatureThreshold = f2c(status.heatTemp);
-  //  this.heatingtemperatureCharacteristic.updateValue(temperatureThreshold, null, this);
-  //}
   this.log.info(this.prefix + " - " + status);
 };
 

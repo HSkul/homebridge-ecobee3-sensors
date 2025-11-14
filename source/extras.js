@@ -52,7 +52,7 @@ EcobeeExtras.prototype.update = function (status) {
     temperatureCharacteristic = f2c(status.temp);
     this.temperatureCharacteristic.updateValue(temperatureCharacteristic, null, this);
   }
-  this.log.info(this.prefix + " - " + f2c(status.temp).toString());
+  this.log.info(this.prefix + " - " + f2c(status.temp).toFixed(1).toString());
 };
 
 EcobeeExtras.prototype.identify = function (callback) {
